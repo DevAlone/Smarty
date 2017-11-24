@@ -1,0 +1,19 @@
+#include "InputProcessor.h"
+
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+
+int main(int argc, char* argv[])
+{
+    qmlRegisterType<InputProcessor>("smarty.input", 1, 0, "InputProcessor");
+
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
+
+    return app.exec();
+}
