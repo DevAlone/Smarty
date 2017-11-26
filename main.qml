@@ -16,14 +16,13 @@ ApplicationWindow {
     MouseArea {
         anchors.fill: parent
         onClicked: Qt.quit();
-//        propagateComposedEvents: false
     }
 
     MainWidget {
         x: parent.width / 4
-        y: parent.height / 2 - Constants.itemHeight / 2
+        y: 0  // parent.height / 2 - Constants.itemHeight / 2
         width: parent.width / 2
-        height: parent.height / 2  // - Constants.itemHeight / 2
+        height: parent.height  // parent.height / 2  // - Constants.itemHeight / 2
     }
 
     Button {

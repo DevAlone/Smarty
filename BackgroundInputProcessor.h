@@ -1,6 +1,8 @@
 #ifndef BACKGROUNDINPUTPROCESSOR_H
 #define BACKGROUNDINPUTPROCESSOR_H
 
+#include "Item.h"
+
 #include <QMutex>
 #include <QThread>
 #include <QWaitCondition>
@@ -20,7 +22,7 @@ public:
 
 signals:
     void processingStarted();
-    void processingFinished(const QStringList& items);
+    void processingFinished(QList<QObject*> items);
 
 public slots:
 
@@ -28,7 +30,7 @@ protected:
     virtual void run();
 
 private:
-    QStringList process();
+    QList<QObject*> process();
     bool _isRunning = true;
     QWaitCondition condition;
     QMutex mutex;

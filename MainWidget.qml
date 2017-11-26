@@ -8,8 +8,20 @@ import "constants.js" as Constants
 
 Item {
     ColumnLayout {
-        anchors.fill: parent
+        // anchors.fill: parent
+        y: itemsView.count > 0 ? parent.height / 4 : parent.height / 2
+        width: parent.width
+        height: parent.height / 2
+
         spacing: 5
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 500
+//                easing.type: Easing.OutExpo
+                easing.type: Easing.OutBack
+            }
+        }
 
         Rectangle {
             z: 5
@@ -31,17 +43,19 @@ Item {
                 selectByMouse: true
                 focus: true
                 onFocusChanged: focus = true;
+
                 Keys.onPressed: {
                     if (event.key === Qt.Key_Down)
-                        ++itemsView.currentIndex;
+                        itemsView.сurrentIndexAdd(1);
                     else if (event.key === Qt.Key_Up)
-                        --itemsView.currentIndex;
+                        itemsView.currentIndexDeduct(1);
                     else if (event.key === Qt.Key_PageDown)
-                        itemsView.currentIndex += 10;
+                        itemsView.сurrentIndexAdd(10);
                     else if (event.key === Qt.Key_PageUp)
-                        itemsView.currentIndex -= 10;
-                    else if (event.key === Qt.Key_Enter && itemsView.visible)
-                        ;// TODO: implement it
+                        itemsView.currentIndexDeduct(10);
+                    else if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                        itemsView.doCurrentItemAction();
+                    }
                     else if (inputProcessor.processKey(event.key))
                         event.accepted = true;
                 }
@@ -62,11 +76,12 @@ Item {
                 anchors.fill: parent
                 id: itemsView
                 visible: false
+
                 spacing: 5
                 highlightMoveDuration: 1000
                 highlightMoveVelocity: 500
                 flickableDirection: Flickable.VerticalFlick
-//                boundsBehavior: Flickable.StopAtBounds
+                //                boundsBehavior: Flickable.StopAtBounds
                 ScrollBar.vertical: ScrollBar {}
 
 
@@ -82,7 +97,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         font.pointSize: Constants.itemFontSize
-                        text: modelData
+                        text: model.modelData.moduleName + ": " + model.modelData.data
                     }
 
                     MouseArea {
@@ -98,11 +113,20 @@ Item {
                     z: 10
                 }
 
-                onCurrentIndexChanged: {
-                    if (currentIndex >= count)
-                        currentIndex = count - 1;
-                    else if (currentIndex < 0)
-                        currentIndex = 0;
+                function сurrentIndexAdd() {
+                    if (currentIndex < count - 1)
+                        ++currentIndex;
+                }
+                function currentIndexDeduct() {
+                    if (currentIndex > 0)
+                        --currentIndex;
+                }
+                function doCurrentItemAction() {
+//                    console.log(JSON.stringify(model[currentIndex]));  // .modelData
+                    if (visible && count > 0) {
+                        var currentItem = model[currentIndex];
+                        currentItem.action();
+                    }
                 }
             }
         }
@@ -115,6 +139,10 @@ Item {
         }
         onProcessingFinished: function (items) {
             itemsView.model = items;
+            console.log(items);
+            console.log(items[0]);
+            console.log(items[0].moduleName);
+
             itemsView.visible = true;
         }
     }

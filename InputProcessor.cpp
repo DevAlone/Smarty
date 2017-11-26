@@ -8,12 +8,14 @@ InputProcessor::InputProcessor(QObject* parent)
 {
     thread = new BackgroundInputProcessor(this);
     thread->start();
+
     connect(
         thread, &BackgroundInputProcessor::processingStarted,
         this, &InputProcessor::processingStarted);
+
     connect(
         thread, &BackgroundInputProcessor::processingFinished,
-        this, &InputProcessor::processingFinished);
+        this, &InputProcessor::threadFinished);
 }
 
 InputProcessor::~InputProcessor()
@@ -41,4 +43,9 @@ bool InputProcessor::processKey(Qt::Key key)
         break;
     }
     return true;
+}
+
+void InputProcessor::threadFinished(QList<QObject*> items)
+{
+    emit processingFinished(items);
 }

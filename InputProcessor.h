@@ -16,11 +16,12 @@ public:
 
 signals:
     void processingStarted();
-    void processingFinished(const QStringList& items);
+    void processingFinished(const QList<QObject*>& items);
 
 public slots:
     void processInput(const QString& input);
     bool processKey(Qt::Key key);
+    void threadFinished(QList<QObject*> items);
 
 private:
     QString lastInput;
