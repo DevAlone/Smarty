@@ -4,4 +4,5 @@ var itemBorderWidth = 2;
 var itemBorderColor = "#a1c4fc";
 var itemBorderColorActive = "#0061ff";
 var itemColor = "#fff";
-var itemFontSize = 13;
+var itemModuleNameFontSize = 9;
+var textItemDataFontSize = 11;

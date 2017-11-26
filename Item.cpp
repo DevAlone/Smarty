@@ -2,22 +2,11 @@
 
 #include <QDebug>
 
-Item::Item(const QString& data, const QIcon& icon, QObject* parent)
+Item::Item(const QIcon& icon, QObject* parent)
     : QObject(parent)
-    , data(data)
     , icon(icon)
 {
-}
-
-QString Item::getData() const
-{
-    return data;
-}
-
-void Item::setData(const QString& value)
-{
-    data = value;
-    emit dataChanged(data);
+    type = ITEM_TYPE::ITEM;
 }
 
 QIcon Item::getIcon() const
@@ -44,5 +33,10 @@ void Item::setModuleName(const QString& value)
 
 void Item::action()
 {
-    qDebug() << "action of model with data: " << data;
+    qDebug() << "action of model";
+}
+
+Item::ITEM_TYPE Item::getType() const
+{
+    return type;
 }

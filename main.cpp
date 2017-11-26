@@ -6,7 +6,10 @@
 int main(int argc, char* argv[])
 {
     qmlRegisterType<InputProcessor>("smarty.input", 1, 0, "InputProcessor");
-    //    qmlRegisterType<Item>("smarty.models", 1, 0, "Item");
+    qmlRegisterType<Item>("smarty.models", 1, 0, "ItemModel");
+    //    qRegisterMetaType<ITEM_TYPE>("ITEM_TYPE");
+    //    qmlRegisterType<ITEM_TYPE>("smarty.models", 1, 0, "ITEM_TYPE");
+    //    qmlRegister
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);

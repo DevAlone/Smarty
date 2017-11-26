@@ -1,7 +1,7 @@
 #include "TestModule.h"
 
 // TODO: fix it
-#include "../Item.h"
+#include "../TextItem.h"
 
 #include <iostream>
 
@@ -17,28 +17,12 @@ TestModule* TestModule::getInstance()
     return obj;
 }
 
-class TestItem : public Item {
-public:
-    TestItem(const QString& str)
-        : Item("test item's data: " + str)
-        , str(str)
-    {
-    }
-    virtual void action()
-    {
-        std::cout << "Test action: " << str.toStdString() << std::endl;
-    }
-
-private:
-    QString str;
-};
-
 QList<QObject*> TestModule::getItems(const QString& input, int count)
 {
     QList<QObject*> result;
     size_t c = count >= 0 ? count : 10;
     for (size_t i = 0; i < c; ++i) {
-        result.append(new TestItem(QString::number(i)));
+        result.append(new TextItem(QString::number(i)));
     }
     return result;
 }

@@ -19,7 +19,7 @@ QList<QObject*> NotTestModule::getItems(const QString& input, int count)
     QList<QObject*> result;
 
     for (int i = 0; i < count; ++i) {
-        result.append(new Item("NotTestModuleItem"));
+        result.append(new Item());
     }
 
     return result;

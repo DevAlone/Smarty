@@ -34,6 +34,8 @@ Project {
             "InputProcessor.h",
             "Item.cpp",
             "Item.h",
+            "TextItem.cpp",
+            "TextItem.h",
             "smart_modules/Module.cpp",
             "smart_modules/Module.h",
             "main.cpp",

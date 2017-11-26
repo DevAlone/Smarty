@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
 import QtQuick.Controls.Styles 1.4
 import smarty.input 1.0
+import smarty.models 1.0
 import "constants.js" as Constants
 
 Item {
@@ -85,26 +86,7 @@ Item {
                 ScrollBar.vertical: ScrollBar {}
 
 
-                delegate: Rectangle {
-                    height: Constants.itemHeight
-                    //                border.color: index == itemsView.currentIndex ? Constants.itemBorderColorActive : Constants.itemBorderColor
-                    border.color: Constants.itemBorderColor
-                    border.width: Constants.itemBorderWidth
-                    width: parent.width
-                    z: 5
-                    color: Constants.itemColor
-
-                    Text {
-                        anchors.centerIn: parent
-                        font.pointSize: Constants.itemFontSize
-                        text: model.modelData.moduleName + ": " + model.modelData.data
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: itemsView.currentIndex = index
-                    }
-                }
+                delegate: ItemViewDelegate { }
 
                 highlight: Rectangle {
                     color: "transparent"
@@ -122,7 +104,6 @@ Item {
                         --currentIndex;
                 }
                 function doCurrentItemAction() {
-//                    console.log(JSON.stringify(model[currentIndex]));  // .modelData
                     if (visible && count > 0) {
                         var currentItem = model[currentIndex];
                         currentItem.action();

@@ -4,5 +4,8 @@
         <file>qtquickcontrols2.conf</file>
         <file>constants.js</file>
         <file>MainWidget.qml</file>
+        <file>ItemViewDelegate.qml</file>
+        <file>ItemView.qml</file>
+        <file>TextItemView.qml</file>
     </qresource>
 </RCC>
