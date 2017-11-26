@@ -10,6 +10,9 @@ int main(int argc, char* argv[])
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("DevAlone");
+    app.setOrganizationDomain("d3d.info");
+    app.setApplicationName("Smarty");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));

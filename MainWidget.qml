@@ -139,11 +139,7 @@ Item {
         }
         onProcessingFinished: function (items) {
             itemsView.model = items;
-            console.log(items);
-            console.log(items[0]);
-            console.log(items[0].moduleName);
-
-            itemsView.visible = true;
+            itemsView.visible = items.length > 0;
         }
     }
 

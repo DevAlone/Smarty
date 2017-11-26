@@ -11,7 +11,7 @@ class Item : public QObject {
     Q_PROPERTY(QString data READ getData WRITE setData NOTIFY dataChanged)
     Q_PROPERTY(QString moduleName READ getModuleName WRITE setModuleName NOTIFY moduleNameChanged)
 public:
-    explicit Item(const QString& data, const QString& moduleName, const QIcon& icon = QIcon(), QObject* parent = nullptr);
+    explicit Item(const QString& data, const QIcon& icon = QIcon(), QObject* parent = nullptr);
 
     QString getData() const;
     void setData(const QString& value);
@@ -32,7 +32,7 @@ signals:
 
 public slots:
 
-private:
+protected:
     QIcon icon;
     QString data;
     QString moduleName;

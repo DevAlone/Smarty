@@ -28,12 +28,21 @@ Project {
         files: [
             "BackgroundInputProcessor.cpp",
             "BackgroundInputProcessor.h",
+            "InputParser.cpp",
+            "InputParser.h",
             "InputProcessor.cpp",
             "InputProcessor.h",
             "Item.cpp",
             "Item.h",
+            "smart_modules/Module.cpp",
+            "smart_modules/Module.h",
             "main.cpp",
             "qml.qrc",
+            "smart_modules/NotTestModule.cpp",
+            "smart_modules/NotTestModule.h",
+            "smart_modules/TestModule.cpp",
+            "smart_modules/TestModule.h",
+            "smart_modules/modules.h",
         ]
 
         Group {     // Properties for the produced executable

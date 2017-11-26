@@ -6,6 +6,7 @@
 BackgroundInputProcessor::BackgroundInputProcessor(QObject* parent)
     : QThread(parent)
 {
+    parser = new InputParser(this);
 }
 
 void BackgroundInputProcessor::processInput(const QString& input)
@@ -37,25 +38,8 @@ void BackgroundInputProcessor::run()
 QList<QObject*> BackgroundInputProcessor::process()
 {
     QString input = lastInput;
-    std::cout << "thread is working: " << input.toStdString() << std::endl;
-    int a;
-    for (size_t i = 0; i < 1000000; ++i)
-        a += rand();
-    std::cout << "rand is: " << a << std::endl;
-    //    if (input.size() < 1)
-    //        return QList<Item*>();
 
-    QList<QObject*> result;
-
-    if (input.size()) {
-        result.append(new Item(input, "input module"));
-        for (size_t i = 0; i < 2; ++i) {
-            auto text = QString("test data") + QString::number(i);
-            auto moduleName = "test module";
-            Item* item = new Item(text, moduleName);
-            result.append(item);
-        }
-    }
+    QList<QObject*> result = parser->parse(input);
 
     for (QObject* item : result)
         item->moveToThread(QGuiApplication::instance()->thread());

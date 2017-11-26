@@ -2,10 +2,9 @@
 
 #include <QDebug>
 
-Item::Item(const QString& data, const QString& moduleName, const QIcon& icon, QObject* parent)
+Item::Item(const QString& data, const QIcon& icon, QObject* parent)
     : QObject(parent)
     , data(data)
-    , moduleName(moduleName)
     , icon(icon)
 {
 }

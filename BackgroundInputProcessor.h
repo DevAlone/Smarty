@@ -1,6 +1,7 @@
 #ifndef BACKGROUNDINPUTPROCESSOR_H
 #define BACKGROUNDINPUTPROCESSOR_H
 
+#include "InputParser.h"
 #include "Item.h"
 
 #include <QMutex>
@@ -31,6 +32,8 @@ protected:
 
 private:
     QList<QObject*> process();
+
+    InputParser* parser = nullptr;
     bool _isRunning = true;
     QWaitCondition condition;
     QMutex mutex;
