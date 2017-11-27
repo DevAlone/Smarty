@@ -40,3 +40,8 @@ Item::ITEM_TYPE Item::getType() const
 {
     return type;
 }
+
+bool Item::getSmartyShouldBeClosed() const
+{
+    return smartyShouldBeClosed;
+}

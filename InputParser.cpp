@@ -8,9 +8,7 @@
 InputParser::InputParser(QObject* parent)
     : QObject(parent)
 {
-    //    registerModule(smart_modules::TestModule::getInstance());
-    registerModule<smart_modules::TestModule>();
-    registerModule<smart_modules::NotTestModule>();
+    modulesManager = ModulesManager::getInstance();
 }
 
 QPair<QString, QString> getKeyValue(const QString& str, size_t index)
@@ -36,7 +34,7 @@ QList<QObject*> InputParser::parse(const QString& input)
     if (delimiterPosition != -1) {
         // module is defined clearly
         auto keyVal = getKeyValue(input, delimiterPosition);
-        auto module = getModuleByLink(keyVal.first);
+        auto module = modulesManager->getModuleByLink(keyVal.first);
 
         if (module)
             guessedModules.append(module);
@@ -47,13 +45,16 @@ QList<QObject*> InputParser::parse(const QString& input)
         guessedModules = guessModules(input);
     }
 
-    int itemsFromModuleCount = settings.value("smarty/parser/itemsFromModuleCount", 5).toInt();
-    if (itemsFromModuleCount < 1)
-        itemsFromModuleCount = 5;
+    int itemsFromModuleCount = settings.value("smarty/parser/itemsFromModuleCount", -1).toInt();
+    if (itemsFromModuleCount < 0)
+        itemsFromModuleCount = -1;
 
     for (smart_modules::Module* module : guessedModules) {
         auto items = module->getItems(input, itemsFromModuleCount);
-        for (int i = 0; i < itemsFromModuleCount && i < items.size(); ++i) {
+        for (int i = 0; i < items.size(); ++i) {
+            if (itemsFromModuleCount >= 0 && i < itemsFromModuleCount)
+                break;
+
             auto item = dynamic_cast<Item*>(items[i]);
             if (item) {
                 item->setModuleName(module->getModuleName());
@@ -69,31 +70,9 @@ QVector<smart_modules::Module*> InputParser::guessModules(const QString& input)
 {
     QVector<smart_modules::Module*> result;
 
-    for (const auto& pair : modules) {
+    for (const auto& pair : modulesManager->getModules()) {
         result.append(pair.second);
     }
 
     return result;
-}
-
-void InputParser::registerModule(smart_modules::Module* singleton)
-{
-    modules[typeid(*singleton)] = singleton;
-
-    for (const auto& link : singleton->getModuleLinks()) {
-        modulesByLink[link.toLower().toStdString()] = singleton;
-    }
-}
-
-smart_modules::Module* InputParser::getModuleByLink(const QString& link)
-{
-    return getModuleByLink(link.toLower().toStdString());
-}
-
-smart_modules::Module* InputParser::getModuleByLink(const std::string& link)
-{
-    if (modulesByLink.find(link) == modulesByLink.end())
-        return nullptr;
-
-    return modulesByLink[link];
 }

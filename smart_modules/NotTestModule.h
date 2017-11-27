@@ -6,7 +6,9 @@
 namespace smart_modules {
 class NotTestModule : public Module {
 public:
-    static NotTestModule* getInstance();
+    template <typename ModuleType>
+    friend ModuleType* getModuleInstance();
+
     virtual QList<QObject*> getItems(const QString& input, int count);
     virtual QString getModuleName();
     virtual QString getModuleUniqueName();

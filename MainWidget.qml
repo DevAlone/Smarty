@@ -19,7 +19,7 @@ Item {
         Behavior on y {
             NumberAnimation {
                 duration: 500
-//                easing.type: Easing.OutExpo
+                //                easing.type: Easing.OutExpo
                 easing.type: Easing.OutBack
             }
         }
@@ -40,7 +40,7 @@ Item {
                 height: parent.height - 2 * parent.border.width
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
-                font.pointSize: Constants.itemFontSize
+                //                font.pointSize: Constants.textItemDataFontSize
                 selectByMouse: true
                 focus: true
                 onFocusChanged: focus = true;
@@ -79,7 +79,7 @@ Item {
                 visible: false
 
                 spacing: 5
-                highlightMoveDuration: 1000
+                highlightMoveDuration: 300
                 highlightMoveVelocity: 500
                 flickableDirection: Flickable.VerticalFlick
                 //                boundsBehavior: Flickable.StopAtBounds
@@ -95,18 +95,22 @@ Item {
                     z: 10
                 }
 
-                function сurrentIndexAdd() {
-                    if (currentIndex < count - 1)
-                        ++currentIndex;
+                function сurrentIndexAdd(value) {
+                    currentIndex += value;
+                    if (currentIndex >= count)
+                        currentIndex = count - 1;
                 }
-                function currentIndexDeduct() {
-                    if (currentIndex > 0)
-                        --currentIndex;
+                function currentIndexDeduct(value) {
+                    currentIndex -= value;
+                    if (currentIndex < 0)
+                        currentIndex = 0;
                 }
                 function doCurrentItemAction() {
                     if (visible && count > 0) {
                         var currentItem = model[currentIndex];
                         currentItem.action();
+                        if (currentItem.smartyShouldBeClosed)
+                            Qt.quit();
                     }
                 }
             }

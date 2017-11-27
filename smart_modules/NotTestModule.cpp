@@ -3,13 +3,6 @@
 #include "../Item.h"
 
 namespace smart_modules {
-NotTestModule* NotTestModule::getInstance()
-{
-    static NotTestModule* obj = new NotTestModule;
-
-    return obj;
-}
-
 NotTestModule::NotTestModule()
 {
 }

@@ -7,6 +7,9 @@
 namespace smart_modules {
 class Module {
 public:
+    template <typename ModuleType>
+    friend ModuleType* getModuleInstance();
+
     virtual ~Module();
 
     /// Override these methods in your *Module class
@@ -32,6 +35,14 @@ protected:
     void operator=(const Module&);
     void operator=(Module&&);
 };
+
+template <typename ModuleType>
+ModuleType* getModuleInstance()
+{
+    static ModuleType* obj = new ModuleType;
+
+    return obj;
+}
 }
 
 #endif // MODULE_H

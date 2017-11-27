@@ -10,13 +10,6 @@ TestModule::TestModule()
 {
 }
 
-TestModule* TestModule::getInstance()
-{
-    static TestModule* obj = new TestModule();
-
-    return obj;
-}
-
 QList<QObject*> TestModule::getItems(const QString& input, int count)
 {
     QList<QObject*> result;
