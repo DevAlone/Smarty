@@ -2,22 +2,10 @@
 
 #include <QDebug>
 
-Item::Item(const QIcon& icon, QObject* parent)
+Item::Item(QObject* parent)
     : QObject(parent)
-    , icon(icon)
 {
     type = ITEM_TYPE::ITEM;
-}
-
-QIcon Item::getIcon() const
-{
-    return icon;
-}
-
-void Item::setIcon(const QIcon& value)
-{
-    icon = value;
-    emit iconChanged(icon);
 }
 
 QString Item::getModuleName() const
@@ -33,7 +21,7 @@ void Item::setModuleName(const QString& value)
 
 void Item::action()
 {
-    qDebug() << "action of model";
+    //    qDebug() << "action of model";
 }
 
 Item::ITEM_TYPE Item::getType() const
@@ -44,4 +32,15 @@ Item::ITEM_TYPE Item::getType() const
 bool Item::getSmartyShouldBeClosed() const
 {
     return smartyShouldBeClosed;
+}
+
+QString Item::getIconPath() const
+{
+    return iconPath;
+}
+
+void Item::setIconPath(const QString& value)
+{
+    iconPath = value;
+    emit iconPathChanged(iconPath);
 }

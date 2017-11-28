@@ -9,13 +9,12 @@ class ProgramItem : public TextItem {
     Q_OBJECT
 
 public:
-    ProgramItem(
-        const QString& path,
-        const QString& name = "",
-        const QIcon& icon = QIcon());
+    ProgramItem(const QString& path);
     ProgramItem(const RunProgramModuleProgram& program);
 
     virtual void action();
+
+    QString getPath() const;
 
 private:
     QString path;

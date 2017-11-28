@@ -36,7 +36,7 @@ bool InputProcessor::processKey(Qt::Key key)
         QGuiApplication::quit();
         break;
     case Qt::Key_Tab:
-        qDebug() << "Tab";
+        //        qDebug() << "Tab";
         break;
     default:
         return false;

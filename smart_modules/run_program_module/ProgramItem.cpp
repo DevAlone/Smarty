@@ -5,8 +5,8 @@
 #include <QDebug>
 
 namespace smart_modules {
-ProgramItem::ProgramItem(const QString& path, const QString& name, const QIcon& icon)
-    : TextItem(name, icon)
+ProgramItem::ProgramItem(const QString& path)
+    : TextItem(path)
     , path(path)
 {
     if (this->data.size() < 1)
@@ -14,8 +14,12 @@ ProgramItem::ProgramItem(const QString& path, const QString& name, const QIcon& 
 }
 
 ProgramItem::ProgramItem(const RunProgramModuleProgram& program)
-    : ProgramItem(program.path, program.name, program.icon)
+    : ProgramItem(program.path)
 {
+    setData(program.name);
+    setIconPath(program.iconPath);
+    if (data.size() < 1)
+        data = program.path;
 }
 
 void ProgramItem::action()
@@ -23,5 +27,10 @@ void ProgramItem::action()
     QProcess process;
 
     process.startDetached(path);
+}
+
+QString ProgramItem::getPath() const
+{
+    return path;
 }
 }

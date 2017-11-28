@@ -7,7 +7,7 @@
 class Item : public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(QIcon icon READ getIcon WRITE setIcon NOTIFY iconChanged)
+    Q_PROPERTY(QString iconPath READ getIconPath WRITE setIconPath NOTIFY iconPathChanged)
     Q_PROPERTY(QString moduleName READ getModuleName WRITE setModuleName NOTIFY moduleNameChanged)
     Q_PROPERTY(ITEM_TYPE type READ getType)
     Q_PROPERTY(bool smartyShouldBeClosed READ getSmartyShouldBeClosed)
@@ -19,10 +19,7 @@ public:
     };
     Q_ENUM(ITEM_TYPE);
 
-    explicit Item(const QIcon& icon = QIcon(), QObject* parent = nullptr);
-
-    QIcon getIcon() const;
-    void setIcon(const QIcon& value);
+    explicit Item(QObject* parent = nullptr);
 
     QString getModuleName() const;
     void setModuleName(const QString& value);
@@ -34,15 +31,18 @@ public:
 
     bool getSmartyShouldBeClosed() const;
 
+    QString getIconPath() const;
+    void setIconPath(const QString& value);
+
 signals:
     void moduleNameChanged(const QString& moduleName);
-    void iconChanged(const QIcon& icon);
+    void iconPathChanged(const QString& iconPath);
 
 public slots:
 
 protected:
     ITEM_TYPE type;
-    QIcon icon;
+    QString iconPath;
     QString moduleName;
     // this flag indicates that Smarty should be closed after execution
     // action (It may not happen if user disabled such behaviour in settings)

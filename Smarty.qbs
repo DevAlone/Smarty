@@ -28,6 +28,8 @@ Project {
         files: [
             "BackgroundInputProcessor.cpp",
             "BackgroundInputProcessor.h",
+            "ImageProvider.cpp",
+            "ImageProvider.h",
             "InputParser.cpp",
             "InputParser.h",
             "InputProcessor.cpp",
@@ -36,6 +38,8 @@ Project {
             "Item.h",
             "ModulesManager.cpp",
             "ModulesManager.h",
+            "RunGuard.cpp",
+            "RunGuard.h",
             "TextItem.cpp",
             "TextItem.h",
             "smart_modules/Module.cpp",
@@ -44,6 +48,8 @@ Project {
             "qml.qrc",
             "smart_modules/NotTestModule.cpp",
             "smart_modules/NotTestModule.h",
+            "smart_modules/run_program_module/qfreedesktop/DesktopEntryFile.cpp",
+            "smart_modules/run_program_module/qfreedesktop/DesktopEntryFile.h",
             "smart_modules/run_program_module/ProgramItem.cpp",
             "smart_modules/run_program_module/ProgramItem.h",
             "smart_modules/run_program_module/RunProgramModule.cpp",
@@ -51,6 +57,8 @@ Project {
             "smart_modules/TestModule.cpp",
             "smart_modules/TestModule.h",
             "smart_modules/modules.h",
+            "smart_modules/run_program_module/qfreedesktop/IconFile.cpp",
+            "smart_modules/run_program_module/qfreedesktop/IconFile.h",
         ]
 
         Group {     // Properties for the produced executable
