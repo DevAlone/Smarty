@@ -7,12 +7,27 @@
 namespace smart_modules {
 class Module {
 public:
-    template <typename ModuleType>
-    friend ModuleType* getModuleInstance();
-
     virtual ~Module();
 
-    /// Override these methods in your *Module class
+    /// Implement these methods in your *Module class:
+    /// virtual void init() = 0;
+    /// virtual QList<QObject*> getItems(const QString& input, int count = -1) = 0;
+    /// virtual QString getModuleName() = 0;
+    /// virtual QString getModuleUniqueName() = 0;
+    /// virtual QVector<QString> getModuleLinks() = 0;
+
+    /// This method will be called on module's initialization(in background thread)
+    /// after initialization, module should be workable,
+    /// but inititalization have not to waste a lot of time
+    virtual void init() = 0;
+
+    /// This method will be calling in background thread
+    /// allowing module to make some processes like indexing of filesystem
+    /// this method is called often and should take as few time as possible
+    virtual void update() = 0;
+
+    /// return true when module should be updated
+    virtual bool needsUpdating() = 0;
 
     /// returns list of Item objects
     virtual QList<QObject*> getItems(const QString& input, int count = -1) = 0;

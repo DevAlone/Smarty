@@ -3,10 +3,13 @@
 
 #include "smart_modules/Module.h"
 
+#include "ModulesManagerBackgroundWorker.h"
+
 #include <QObject>
 #include <QString>
 #include <QVector>
 
+#include <queue>
 #include <string>
 #include <typeindex>
 #include <unordered_map>
@@ -14,12 +17,13 @@
 class ModulesManager : public QObject {
     Q_OBJECT
 public:
+    friend class ModulesManagerBackgroundWorker;
+
     static ModulesManager* getInstance();
     // can return nullptr
     smart_modules::Module* getModuleByLink(const QString& link);
     smart_modules::Module* getModuleByLink(const std::string& link);
 
-    void registerModule(smart_modules::Module* singleton);
     template <typename ModuleType>
     void registerModule();
 
@@ -27,21 +31,20 @@ public:
 
 private:
     explicit ModulesManager(QObject* parent = nullptr);
-signals:
 
-public slots:
+    void _registerModule(smart_modules::Module* module);
 
-private:
+    ModulesManagerBackgroundWorker* worker = nullptr;
     std::unordered_map<std::type_index, smart_modules::Module*> modules;
     // TODO: consider using QString due to good unicode support
     std::unordered_map<std::string, smart_modules::Module*> modulesByLink;
+    std::queue<smart_modules::Module*> modulesQueue;
 };
 
 template <typename ModuleType>
 void ModulesManager::registerModule()
 {
-    //    registerModule(ModuleType::getInstance());
-    registerModule(smart_modules::getModuleInstance<ModuleType>());
+    modulesQueue.push(smart_modules::getModuleInstance<ModuleType>());
 }
 
 #endif // MODULESMANAGER_H

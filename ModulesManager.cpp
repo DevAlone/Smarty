@@ -1,4 +1,5 @@
 #include "ModulesManager.h"
+#include "ModulesManagerBackgroundWorker.h"
 
 ModulesManager* ModulesManager::getInstance()
 {
@@ -10,6 +11,8 @@ ModulesManager* ModulesManager::getInstance()
 ModulesManager::ModulesManager(QObject* parent)
     : QObject(parent)
 {
+    worker = new ModulesManagerBackgroundWorker(this);
+    worker->start(QThread::LowestPriority);
 }
 
 const std::unordered_map<std::type_index, smart_modules::Module*>&
@@ -18,12 +21,12 @@ ModulesManager::getModules() const
     return modules;
 }
 
-void ModulesManager::registerModule(smart_modules::Module* singleton)
+void ModulesManager::_registerModule(smart_modules::Module* module)
 {
-    modules[typeid(*singleton)] = singleton;
+    modules[typeid(*module)] = module;
 
-    for (const auto& link : singleton->getModuleLinks()) {
-        modulesByLink[link.toLower().toStdString()] = singleton;
+    for (const auto& link : module->getModuleLinks()) {
+        modulesByLink[link.toLower().toStdString()] = module;
     }
 }
 

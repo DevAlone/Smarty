@@ -66,7 +66,7 @@ QList<QObject*> InputParser::parse(const QString& input)
     return result;
 }
 
-QVector<smart_modules::Module*> InputParser::guessModules(const QString& input)
+QVector<smart_modules::Module*> InputParser::guessModules(const QString&)
 {
     QVector<smart_modules::Module*> result;
 

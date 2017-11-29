@@ -1,7 +1,7 @@
 #include "RunProgramModule.h"
 #include "ProgramItem.h"
 #include "qfreedesktop/DesktopEntryFile.h"
-#include "qfreedesktop/IconFile.h"
+//#include "qfreedesktop/IconFile.h"
 
 #include <QDirIterator>
 #include <QtCore>
@@ -33,7 +33,7 @@ void RunProgramModule::updateProgramsFromPath()
         if (programs.find(path) != programs.end())
             continue;
 
-        programs[path] = RunProgramModuleProgram(path);
+        updateProgram(RunProgramModuleProgram(path));
     }
 }
 
@@ -62,42 +62,47 @@ void RunProgramModule::updateProgramsFromDesktopFilesDirectory(const QString& di
         if (exec.size() == 0)
             continue;
 
-        QString name = desktopFile.getItem("Desktop Entry", "Name");
-        QString description = desktopFile.getItem("Desktop Entry", "Comment");
-        QString iconPath = IconFile(desktopFile.getItem("Desktop Entry", "Icon"))
-                               .getRealAbsolutePath();
-        QString terminal = desktopFile.getItem("Desktop Entry", "Terminal");
-
         // TODO: convert exec to path
         RunProgramModuleProgram program(exec);
-        auto it = programs.find(exec);
-        if (it != programs.end())
-            program = *it;
 
-        if (!name.isEmpty())
-            program.name = name;
-
-        if (!description.isEmpty())
-            program.description = description;
-
-        if (!iconPath.isEmpty())
-            program.iconPath = iconPath;
+        program.name = desktopFile.getItem("Desktop Entry", "Name");
+        program.description = desktopFile.getItem("Desktop Entry", "Comment");
+        program.iconPath = desktopFile.getItem("Desktop Entry", "Icon");
+        QString terminal = desktopFile.getItem("Desktop Entry", "Terminal");
 
         if (terminal == "true")
             program.terminal = true;
         else if (terminal == "false")
             program.terminal = false;
 
-        programs[exec] = program;
+        updateProgram(program);
     }
 }
 
-RunProgramModule::RunProgramModule()
+void RunProgramModule::updateProgram(const RunProgramModuleProgram& program)
 {
-    updateProgramsFromPath();
-    // TODO: make it starting later
-    updateProgramsFromDesktopFilesDirectory("/usr/share/applications");
-    //    updateProgramsFromDesktopFilesDirectory("/usr/share/");
+    if (program.path.isEmpty())
+        return;
+
+    auto it = programs.find(program.path);
+
+    if (it == programs.end()) {
+        programs.insert(program.path, program);
+    } else {
+        RunProgramModuleProgram& p = *it;
+
+        if (!program.name.isEmpty())
+            p.name = program.name;
+
+        if (!program.description.isEmpty())
+            p.description = program.description;
+
+        if (!program.iconPath.isEmpty())
+            p.iconPath = program.iconPath;
+
+        if (program.terminal.isValid())
+            p.terminal = program.terminal.toBool();
+    }
 }
 
 QString keepOnlyLettersAndDigits(const QString& str)
@@ -125,6 +130,77 @@ bool containsParts(const QString& str, const QString& substr, long* match = null
 
     return substrIndex == (substr.size());
 }
+long RunProgramModule::compareProgramToInput(
+    const RunProgramModuleProgram& program, const QString& input)
+{
+    QFileInfo programFileInfo(program.path);
+    auto fileName = programFileInfo.fileName();
+
+    //    // TODO: optimize it
+    //    if (fileName == input) {
+    //        // max priority
+    //        // TODO: make it better
+    //        result.insert(0, new ProgramItem(program));
+    //    } else if (fileName.startsWith(input)) {
+    //        result.append(new ProgramItem(program));
+    //    } else {
+    //        QString simplifiedFileName = keepOnlyLettersAndDigits(fileName).toLower();
+    //        QString simplifiedInput = keepOnlyLettersAndDigits(input).toLower();
+
+    //        if (simplifiedFileName.contains(simplifiedInput))
+    //            result.append(new ProgramItem(program));
+    //        else if (containsParts(simplifiedFileName, simplifiedInput))
+    //            result.append(new ProgramItem(program));
+    //    }
+    QString simplifiedInput = keepOnlyLettersAndDigits(input).toLower();
+
+    {
+        QString simplifiedField = keepOnlyLettersAndDigits(fileName).toLower();
+
+        if (containsParts(simplifiedField, simplifiedInput))
+            return 1000;
+    }
+    {
+        QString simplifiedField = keepOnlyLettersAndDigits(program.name).toLower();
+
+        if (containsParts(simplifiedField, simplifiedInput))
+            return 100;
+    }
+    {
+        QString simplifiedField = keepOnlyLettersAndDigits(program.path).toLower();
+
+        if (containsParts(simplifiedField, simplifiedInput))
+            return 50;
+    }
+    {
+        QString simplifiedField = keepOnlyLettersAndDigits(program.description).toLower();
+
+        if (containsParts(simplifiedField, simplifiedInput))
+            return 10;
+    }
+
+    return 0;
+}
+
+RunProgramModule::RunProgramModule()
+{
+}
+
+void RunProgramModule::init()
+{
+    updateProgramsFromPath();
+}
+
+void RunProgramModule::update()
+{
+    // TODO: split it to parts
+    updateProgramsFromDesktopFilesDirectory("/usr/share/applications");
+    //    updateProgramsFromDesktopFilesDirectory("/usr/share/");
+}
+bool RunProgramModule::needsUpdating()
+{
+    return true;
+}
 
 QList<QObject*> RunProgramModule::getItems(const QString& input, int count)
 {
@@ -134,28 +210,8 @@ QList<QObject*> RunProgramModule::getItems(const QString& input, int count)
         return result;
 
     for (const RunProgramModuleProgram& program : programs) {
-        QFileInfo programFileInfo(program.path);
-        auto fileName = programFileInfo.fileName();
-
-        //        if (program.path.contains("python3.5")) {
-        //            qDebug() << program.path;
-        //        }
-
-        // TODO: optimize it
-        if (fileName == input) {
-            // max priority
-            // TODO: make it better
-            result.insert(0, new ProgramItem(program));
-        } else if (fileName.startsWith(input)) {
+        if (compareProgramToInput(program, input) > 0) {
             result.append(new ProgramItem(program));
-        } else {
-            QString simplifiedFileName = keepOnlyLettersAndDigits(fileName).toLower();
-            QString simplifiedInput = keepOnlyLettersAndDigits(input).toLower();
-
-            if (simplifiedFileName.contains(simplifiedInput))
-                result.append(new ProgramItem(program));
-            else if (containsParts(simplifiedFileName, simplifiedInput))
-                result.append(new ProgramItem(program));
         }
 
         if (count > 0 && result.size() >= count)

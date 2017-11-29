@@ -21,6 +21,11 @@ void BackgroundInputProcessor::processInput(const QString& input)
 
 void BackgroundInputProcessor::run()
 {
+    //    auto modulesManager = ModulesManager::getInstance();
+    //    for (const auto& pair : modulesManager->getModules()) {
+    //        pair.second->init();
+    //    }
+
     while (_isRunning) {
         emit processingStarted();
         isWaiting = false;
@@ -30,6 +35,10 @@ void BackgroundInputProcessor::run()
             queued = false;
             continue;
         }
+        //        for (const auto& pair : modulesManager->getModules()) {
+        //            if (pair.second->needsUpdating())
+        //                pair.second->update();
+        //        }
         QMutexLocker locker(&mutex);
         condition.wait(&mutex);
     }

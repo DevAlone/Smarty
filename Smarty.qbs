@@ -25,9 +25,15 @@ Project {
             //"QT_DISABLE_DEPRECATED_BEFORE=0x060000" // disables all the APIs deprecated before Qt 6.0.0
         ]
 
+        cpp.systemIncludePaths: [
+            "."
+        ]
+
         files: [
             "BackgroundInputProcessor.cpp",
             "BackgroundInputProcessor.h",
+            "IconProcessor.cpp",
+            "IconProcessor.h",
             "ImageProvider.cpp",
             "ImageProvider.h",
             "InputParser.cpp",
@@ -38,6 +44,8 @@ Project {
             "Item.h",
             "ModulesManager.cpp",
             "ModulesManager.h",
+            "ModulesManagerBackgroundWorker.cpp",
+            "ModulesManagerBackgroundWorker.h",
             "RunGuard.cpp",
             "RunGuard.h",
             "TextItem.cpp",
@@ -48,8 +56,6 @@ Project {
             "qml.qrc",
             "smart_modules/NotTestModule.cpp",
             "smart_modules/NotTestModule.h",
-            "smart_modules/run_program_module/qfreedesktop/DesktopEntryFile.cpp",
-            "smart_modules/run_program_module/qfreedesktop/DesktopEntryFile.h",
             "smart_modules/run_program_module/ProgramItem.cpp",
             "smart_modules/run_program_module/ProgramItem.h",
             "smart_modules/run_program_module/RunProgramModule.cpp",
@@ -57,8 +63,12 @@ Project {
             "smart_modules/TestModule.cpp",
             "smart_modules/TestModule.h",
             "smart_modules/modules.h",
-            "smart_modules/run_program_module/qfreedesktop/IconFile.cpp",
-            "smart_modules/run_program_module/qfreedesktop/IconFile.h",
+            "qfreedesktop/DesktopEntryFile.cpp",
+            "qfreedesktop/DesktopEntryFile.h",
+            "qfreedesktop/IconFile.cpp",
+            "qfreedesktop/IconFile.h",
+            "smart_modules/run_program_module/RunProgramModuleProgram.cpp",
+            "smart_modules/run_program_module/RunProgramModuleProgram.h",
         ]
 
         Group {     // Properties for the produced executable

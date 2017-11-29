@@ -2,6 +2,7 @@
 
 #include <QtCore>
 
+#include <IconProcessor.h>
 #include <QDebug>
 
 namespace smart_modules {
@@ -17,7 +18,7 @@ ProgramItem::ProgramItem(const RunProgramModuleProgram& program)
     : ProgramItem(program.path)
 {
     setData(program.name);
-    setIconPath(program.iconPath);
+    setIconPath(IconProcessor::resolveIconPath(program.iconPath));
     if (data.size() < 1)
         data = program.path;
 }

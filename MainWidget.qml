@@ -64,7 +64,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             id: itemsView
-            visible: false
+            visible: true
 
             spacing: 0  // 5
             highlightMoveDuration: 300
@@ -106,11 +106,12 @@ Item {
     InputProcessor {
         id: inputProcessor;
         onProcessingStarted: {
-            itemsView.visible = false;
+//            itemsView.visible = false;
         }
         onProcessingFinished: function (items) {
             itemsView.model = items;
-            itemsView.visible = items.length > 0;
+            // itemsView.visible = items.length > 0;
+//            itemsView.visible = true;
         }
     }
 
