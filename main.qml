@@ -10,7 +10,6 @@ ApplicationWindow {
     visible: true
     visibility: Window.FullScreen
     flags: Qt.FramelessWindowHint | Qt.WA_TranslucentBackground
-
     color: "#7f000000"
 
     MouseArea {
@@ -20,9 +19,18 @@ ApplicationWindow {
 
     MainWidget {
         x: parent.width / 4
-        y: 0  // parent.height / 2 - Constants.itemHeight / 2
+        y: hasItems() ? parent.height / 4: parent.height / 2 - getHeight()
         width: parent.width / 2
-        height: parent.height  // parent.height / 2  // - Constants.itemHeight / 2
+        height: Math.min(parent.height / 2, getHeight())
+        spacing: 5
+
+        Behavior on y {
+            NumberAnimation {
+                duration: 500
+                //                easing.type: Easing.OutExpo
+                easing.type: Easing.OutBack
+            }
+        }
     }
 
     Button {
@@ -35,6 +43,9 @@ ApplicationWindow {
         onClicked: Qt.quit();
     }
 
-
+    onActiveChanged: {
+        if (!active)
+            Qt.quit();
+    }
 }
 

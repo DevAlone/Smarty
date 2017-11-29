@@ -29,7 +29,10 @@ Rectangle {
 
     Rectangle {
         id: itemViewContainer
-        anchors.fill: parent
+        x: parent.border.width
+        y: parent.border.width
+        width: parent.width - 2 * parent.border.width
+        height: parent.height - 2 * parent.border.width
         z: 1
     }
 

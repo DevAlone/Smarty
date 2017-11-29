@@ -35,7 +35,8 @@ int main(int argc, char* argv[])
     ImageProvider* imageProvider = new ImageProvider();
     engine.addImageProvider("file", imageProvider);
 
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    //    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    engine.load(QUrl(QLatin1String("qrc:/mainWithoutBackground.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 

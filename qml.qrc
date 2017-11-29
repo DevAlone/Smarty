@@ -7,5 +7,6 @@
         <file>ItemViewDelegate.qml</file>
         <file>ItemView.qml</file>
         <file>TextItemView.qml</file>
+        <file>mainWithoutBackground.qml</file>
     </qresource>
 </RCC>

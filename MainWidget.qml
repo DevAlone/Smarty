@@ -9,28 +9,20 @@ import "constants.js" as Constants
 
 Item {
     ColumnLayout {
-        // anchors.fill: parent
-        y: itemsView.count > 0 ? parent.height / 4 : parent.height / 2
-        width: parent.width
-        height: parent.height / 2
+        id: mainLayout
+        anchors.fill: parent
+        spacing: 0  // 5
 
-        spacing: 5
-
-        Behavior on y {
-            NumberAnimation {
-                duration: 500
-                //                easing.type: Easing.OutExpo
-                easing.type: Easing.OutBack
-            }
-        }
 
         Rectangle {
             z: 5
+            id: mainInputRect
             height: Constants.itemHeight
             color: Constants.itemColor
             border.color: Constants.itemBorderColor
             border.width: Constants.itemBorderWidth
             Layout.fillWidth: true
+
 
             TextField {
                 id: mainInput
@@ -40,7 +32,7 @@ Item {
                 height: parent.height - 2 * parent.border.width
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
-                //                font.pointSize: Constants.textItemDataFontSize
+                font.pointSize: Constants.textItemDataFontSize
                 selectByMouse: true
                 focus: true
                 onFocusChanged: focus = true;
@@ -68,50 +60,44 @@ Item {
             }
         }
 
-        Item {
-            z: 2
+        ListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            id: itemsView
+            visible: false
 
-            ListView {
-                anchors.fill: parent
-                id: itemsView
-                visible: false
+            spacing: 0  // 5
+            highlightMoveDuration: 300
+            highlightMoveVelocity: 500
+            flickableDirection: Flickable.VerticalFlick
+            //                boundsBehavior: Flickable.StopAtBounds
+            ScrollBar.vertical: ScrollBar {}
 
-                spacing: 5
-                highlightMoveDuration: 300
-                highlightMoveVelocity: 500
-                flickableDirection: Flickable.VerticalFlick
-                //                boundsBehavior: Flickable.StopAtBounds
-                ScrollBar.vertical: ScrollBar {}
+            delegate: ItemViewDelegate { }
 
+            highlight: Rectangle {
+                color: "transparent"
+                border.color: Constants.itemBorderColorActive
+                border.width: Constants.itemBorderWidth
+                z: 10
+            }
 
-                delegate: ItemViewDelegate { }
-
-                highlight: Rectangle {
-                    color: "transparent"
-                    border.color: Constants.itemBorderColorActive
-                    border.width: Constants.itemBorderWidth
-                    z: 10
-                }
-
-                function сurrentIndexAdd(value) {
-                    currentIndex += value;
-                    if (currentIndex >= count)
-                        currentIndex = count - 1;
-                }
-                function currentIndexDeduct(value) {
-                    currentIndex -= value;
-                    if (currentIndex < 0)
-                        currentIndex = 0;
-                }
-                function doCurrentItemAction() {
-                    if (visible && count > 0) {
-                        var currentItem = model[currentIndex];
-                        currentItem.action();
-                        if (currentItem.smartyShouldBeClosed)
-                            Qt.quit();
-                    }
+            function сurrentIndexAdd(value) {
+                currentIndex += value;
+                if (currentIndex >= count)
+                    currentIndex = count - 1;
+            }
+            function currentIndexDeduct(value) {
+                currentIndex -= value;
+                if (currentIndex < 0)
+                    currentIndex = 0;
+            }
+            function doCurrentItemAction() {
+                if (visible && count > 0) {
+                    var currentItem = model[currentIndex];
+                    currentItem.action();
+                    if (currentItem.smartyShouldBeClosed)
+                        Qt.quit();
                 }
             }
         }
@@ -128,7 +114,20 @@ Item {
         }
     }
 
-    Component.onCompleted: {
+    function getMinimumHeight () {
+        return mainInputRect.height;
+    }
+    function getHeight (){
+        return mainInputRect.height + itemsView.count * (Constants.itemHeight + spacing);
+    }
+    function hasItems() {
+        return itemsView.count > 0;
+    }
 
+    property int spacing: 0
+
+    onSpacingChanged: {
+        mainLayout.spacing = spacing;
+        itemsView.spacing = spacing;
     }
 }
