@@ -9,8 +9,8 @@ class ProgramItem : public TextItem {
     Q_OBJECT
 
 public:
-    ProgramItem(const QString& path);
-    ProgramItem(const RunProgramModuleProgram& program);
+    ProgramItem(smart_modules::Module* module, const QString& path);
+    ProgramItem(smart_modules::Module* module, const RunProgramModuleProgram& program);
 
     virtual void action();
 

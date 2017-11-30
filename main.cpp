@@ -6,6 +6,7 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 int main(int argc, char* argv[])
 {
@@ -31,6 +32,12 @@ int main(int argc, char* argv[])
     qmlRegisterType<Item>("smarty.models", 1, 0, "ItemModel");
 
     QQmlApplicationEngine engine;
+
+#ifdef QT_DEBUG
+    engine.rootContext()->setContextProperty("debug", true);
+#else
+    engine.rootContext()->setContextProperty("debug", false);
+#endif
 
     ImageProvider* imageProvider = new ImageProvider();
     engine.addImageProvider("file", imageProvider);

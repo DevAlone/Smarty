@@ -1,7 +1,7 @@
 #include "TextItem.h"
 
-TextItem::TextItem(const QString& data, QObject* parent)
-    : Item(parent)
+TextItem::TextItem(smart_modules::Module* module, const QString& data, QObject* parent)
+    : Item(module, parent)
     , data(data)
 {
     type = Item::TEXT_ITEM;

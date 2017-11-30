@@ -5,6 +5,8 @@
 
 #include <QSettings>
 
+#include <QDebug>
+
 InputParser::InputParser(QObject* parent)
     : QObject(parent)
 {
@@ -20,9 +22,10 @@ QPair<QString, QString> getKeyValue(const QString& str, size_t index)
 
 QList<QObject*> InputParser::parse(const QString& input)
 {
-    QList<QObject*> result;
+    QVector<Item*> resultItems;
+
     if (input.size() == 0)
-        return result;
+        return QList<QObject*>();
 
     QSettings settings;
 
@@ -56,12 +59,19 @@ QList<QObject*> InputParser::parse(const QString& input)
                 break;
 
             auto item = dynamic_cast<Item*>(items[i]);
-            if (item) {
-                item->setModuleName(module->getModuleName());
-                result.append(items[i]);
-            }
+            if (item)
+                resultItems.append(items[i]);
         }
     }
+
+    qSort(resultItems.begin(), resultItems.end(), [](Item* left, Item* right) {
+        return !(*left < *right);
+    });
+
+    QList<QObject*> result;
+
+    for (Item* item : resultItems)
+        result.append(item);
 
     return result;
 }

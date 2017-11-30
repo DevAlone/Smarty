@@ -8,7 +8,7 @@ class TextItem : public Item {
 
     Q_PROPERTY(QString data READ getData WRITE setData NOTIFY dataChanged)
 public:
-    TextItem(const QString& data, QObject* parent = nullptr);
+    TextItem(smart_modules::Module* module, const QString& data, QObject* parent = nullptr);
 
     QString getData() const;
     void setData(const QString& value);

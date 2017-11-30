@@ -22,6 +22,9 @@ struct RunProgramModuleProgram {
     QVariant terminal;
 
     QString description;
+
+    // <= 0 means program doesn't match to input
+    int compareToString(const QString& text) const;
 };
 
 inline bool operator==(const RunProgramModuleProgram& left, const RunProgramModuleProgram& right)

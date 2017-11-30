@@ -1,22 +1,22 @@
 #include "Item.h"
 
+#include "smart_modules/Module.h"
+
 #include <QDebug>
 
-Item::Item(QObject* parent)
+Item::Item(smart_modules::Module* module, QObject* parent)
     : QObject(parent)
+    , module(module)
 {
     type = ITEM_TYPE::ITEM;
 }
 
 QString Item::getModuleName() const
 {
-    return moduleName;
-}
+    if (!module)
+        return "";
 
-void Item::setModuleName(const QString& value)
-{
-    moduleName = value;
-    emit moduleNameChanged(moduleName);
+    return module->getModuleName();
 }
 
 void Item::action()
@@ -43,4 +43,25 @@ void Item::setIconPath(const QString& value)
 {
     iconPath = value;
     emit iconPathChanged(iconPath);
+}
+
+int Item::getPriority() const
+{
+    return priority;
+}
+
+bool Item::operator<(const Item& other)
+{
+    auto modulePriority = module ? module->getPriority() : 0;
+    auto otherModulePriority = other.module ? other.module->getPriority() : 0;
+
+    if (modulePriority == otherModulePriority)
+        return priority < other.priority;
+
+    return modulePriority < otherModulePriority;
+}
+
+void Item::setPriority(int value)
+{
+    priority = value;
 }

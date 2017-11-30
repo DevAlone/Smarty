@@ -1,13 +1,19 @@
 #ifndef MODULE_H
 #define MODULE_H
 
+#include <Item.h>
 #include <QObject>
 #include <QString>
+#include <QVector>
 
 namespace smart_modules {
 class Module {
 public:
     virtual ~Module();
+
+    /// Copy this friend declaration to your *Module class:
+    template <typename ModuleType>
+    friend ModuleType* getModuleInstance();
 
     /// Implement these methods in your *Module class:
     /// virtual void init() = 0;
@@ -30,7 +36,7 @@ public:
     virtual bool needsUpdating() = 0;
 
     /// returns list of Item objects
-    virtual QList<QObject*> getItems(const QString& input, int count = -1) = 0;
+    virtual QVector<Item*> getItems(const QString& input, int count = -1) = 0;
 
     /// returns moduleName which will be displayed to user
     virtual QString getModuleName() = 0;
@@ -43,12 +49,17 @@ public:
     /// returns names which will be used in parser
     virtual QVector<QString> getModuleLinks() = 0;
 
+    int getPriority() const;
+
 protected:
     Module();
-    Module(const Module&); // = delete;
-    Module(Module&&); // = delete;
-    void operator=(const Module&);
-    void operator=(Module&&);
+    Module(const Module&) = delete;
+    Module(Module&&) = delete;
+    void operator=(const Module&) = delete;
+    void operator=(Module&&) = delete;
+
+private:
+    int priority = 0;
 };
 
 template <typename ModuleType>

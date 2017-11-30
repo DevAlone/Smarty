@@ -6,16 +6,16 @@
 #include <QDebug>
 
 namespace smart_modules {
-ProgramItem::ProgramItem(const QString& path)
-    : TextItem(path)
+ProgramItem::ProgramItem(Module* module, const QString& path)
+    : TextItem(module, path)
     , path(path)
 {
     if (this->data.size() < 1)
         this->data = path;
 }
 
-ProgramItem::ProgramItem(const RunProgramModuleProgram& program)
-    : ProgramItem(program.path)
+ProgramItem::ProgramItem(Module* module, const RunProgramModuleProgram& program)
+    : ProgramItem(module, program.path)
 {
     setData(program.name);
     setIconPath(IconProcessor::resolveIconPath(program.iconPath));

@@ -20,7 +20,7 @@ InputProcessor::InputProcessor(QObject* parent)
 
 InputProcessor::~InputProcessor()
 {
-    thread->stop(100);
+    //    thread->stop(10);
 }
 
 void InputProcessor::processInput(const QString& input)

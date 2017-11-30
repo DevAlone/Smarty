@@ -105,83 +105,6 @@ void RunProgramModule::updateProgram(const RunProgramModuleProgram& program)
     }
 }
 
-QString keepOnlyLettersAndDigits(const QString& str)
-{
-    QString res = "";
-
-    for (QChar ch : str)
-        if (ch.isDigit() || ch.isLetter())
-            res += ch;
-
-    return res;
-}
-
-bool containsParts(const QString& str, const QString& substr, long* match = nullptr)
-{
-    int strIndex = 0;
-    int substrIndex = 0;
-
-    for (; substrIndex < substr.size() && strIndex < str.size(); ++strIndex) {
-        if (str[strIndex] == substr[substrIndex])
-            ++substrIndex;
-        else if (match)
-            --*match;
-    }
-
-    return substrIndex == (substr.size());
-}
-long RunProgramModule::compareProgramToInput(
-    const RunProgramModuleProgram& program, const QString& input)
-{
-    QFileInfo programFileInfo(program.path);
-    auto fileName = programFileInfo.fileName();
-
-    //    // TODO: optimize it
-    //    if (fileName == input) {
-    //        // max priority
-    //        // TODO: make it better
-    //        result.insert(0, new ProgramItem(program));
-    //    } else if (fileName.startsWith(input)) {
-    //        result.append(new ProgramItem(program));
-    //    } else {
-    //        QString simplifiedFileName = keepOnlyLettersAndDigits(fileName).toLower();
-    //        QString simplifiedInput = keepOnlyLettersAndDigits(input).toLower();
-
-    //        if (simplifiedFileName.contains(simplifiedInput))
-    //            result.append(new ProgramItem(program));
-    //        else if (containsParts(simplifiedFileName, simplifiedInput))
-    //            result.append(new ProgramItem(program));
-    //    }
-    QString simplifiedInput = keepOnlyLettersAndDigits(input).toLower();
-
-    {
-        QString simplifiedField = keepOnlyLettersAndDigits(fileName).toLower();
-
-        if (containsParts(simplifiedField, simplifiedInput))
-            return 1000;
-    }
-    {
-        QString simplifiedField = keepOnlyLettersAndDigits(program.name).toLower();
-
-        if (containsParts(simplifiedField, simplifiedInput))
-            return 100;
-    }
-    {
-        QString simplifiedField = keepOnlyLettersAndDigits(program.path).toLower();
-
-        if (containsParts(simplifiedField, simplifiedInput))
-            return 50;
-    }
-    {
-        QString simplifiedField = keepOnlyLettersAndDigits(program.description).toLower();
-
-        if (containsParts(simplifiedField, simplifiedInput))
-            return 10;
-    }
-
-    return 0;
-}
-
 RunProgramModule::RunProgramModule()
 {
 }
@@ -202,16 +125,19 @@ bool RunProgramModule::needsUpdating()
     return true;
 }
 
-QList<QObject*> RunProgramModule::getItems(const QString& input, int count)
+QVector<Item*> RunProgramModule::getItems(const QString& input, int count)
 {
-    QList<QObject*> result;
+    QVector<Item*> result;
 
     if (count == 0)
         return result;
 
     for (const RunProgramModuleProgram& program : programs) {
-        if (compareProgramToInput(program, input) > 0) {
-            result.append(new ProgramItem(program));
+        int similarity = program.compareToString(input);
+        if (similarity > 0) {
+            auto item = new ProgramItem(this, program);
+            item->setPriority(similarity);
+            result.append(item);
         }
 
         if (count > 0 && result.size() >= count)

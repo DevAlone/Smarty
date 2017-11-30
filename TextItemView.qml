@@ -17,7 +17,7 @@ Item {
         Text {
             id: textItem
             font.pointSize: Constants.textItemDataFontSize
-            text: model.modelData.data
+            text: model.modelData.data + ": " + model.modelData.priority
         }
 
     }

@@ -44,7 +44,7 @@ ApplicationWindow {
     }
 
     onActiveChanged: {
-        if (!active)
+        if (!debug && !active)
             Qt.quit();
     }
 }
