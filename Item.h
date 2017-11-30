@@ -16,6 +16,7 @@ class Item : public QObject {
     Q_PROPERTY(ITEM_TYPE type READ getType)
     Q_PROPERTY(bool smartyShouldBeClosed READ getSmartyShouldBeClosed)
     Q_PROPERTY(int priority READ getPriority CONSTANT)
+    Q_PROPERTY(QString renderer READ getRenderer CONSTANT)
 
 public:
     enum ITEM_TYPE {
@@ -44,6 +45,8 @@ public:
 
     void setPriority(int value);
 
+    QString getRenderer() const;
+
 signals:
     // void moduleNameChanged(const QString& moduleName);
     void iconPathChanged(const QString& iconPath);
@@ -59,6 +62,8 @@ protected:
     // action (It may not happen if user disabled such behaviour in settings)
     bool smartyShouldBeClosed = true;
     int priority = 0;
+
+    QString renderer = "ItemRenderer";
 };
 
 #endif // ITEM_H

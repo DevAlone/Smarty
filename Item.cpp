@@ -65,3 +65,8 @@ void Item::setPriority(int value)
 {
     priority = value;
 }
+
+QString Item::getRenderer() const
+{
+    return renderer;
+}

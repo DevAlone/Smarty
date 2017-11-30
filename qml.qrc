@@ -5,8 +5,12 @@
         <file>constants.js</file>
         <file>MainWidget.qml</file>
         <file>ItemViewDelegate.qml</file>
-        <file>ItemView.qml</file>
-        <file>TextItemView.qml</file>
         <file>mainWithoutBackground.qml</file>
+    </qresource>
+    <qresource prefix="/item_renderer">
+        <file>ItemRenderer.qml</file>
+        <file>TextItemRenderer.qml</file>
+        <file>ProgramItemRenderer.qml</file>
+        <file>Icon.qml</file>
     </qresource>
 </RCC>

@@ -5,6 +5,7 @@ TextItem::TextItem(smart_modules::Module* module, const QString& data, QObject* 
     , data(data)
 {
     type = Item::TEXT_ITEM;
+    renderer = "TextItemRenderer";
 }
 
 QString TextItem::getData() const
