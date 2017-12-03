@@ -14,8 +14,9 @@ class ProgramItem : public TextItem {
 public:
     ProgramItem(smart_modules::Module* module,
         const QString& path,
+        const QStringList& arguments,
         const QString& description,
-        const QVariant &terminal);
+        const QVariant& terminal);
 
     ProgramItem(smart_modules::Module* module, const RunProgramModuleProgram& program);
 
@@ -29,6 +30,7 @@ public:
 
 private:
     QString path;
+    QStringList arguments;
     QString description;
     bool terminal;
 };

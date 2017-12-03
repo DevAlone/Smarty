@@ -9,6 +9,13 @@ BackgroundInputProcessor::BackgroundInputProcessor(QObject* parent)
     parser = new InputParser(this);
 }
 
+BackgroundInputProcessor* BackgroundInputProcessor::getInstance()
+{
+    static BackgroundInputProcessor* obj = new BackgroundInputProcessor();
+
+    return obj;
+}
+
 void BackgroundInputProcessor::processInput(const QString& input)
 {
     lastInput = input;
@@ -23,7 +30,7 @@ void BackgroundInputProcessor::run()
 {
     // TODO: do not find when input wasn't changed
 
-    while (_isRunning) {
+    while (_isProcessing) {
         emit processingStarted();
         isWaiting = false;
         emit processingFinished(process());
@@ -50,21 +57,21 @@ QList<QObject*> BackgroundInputProcessor::process()
     return result;
 }
 
-bool BackgroundInputProcessor::isRunning() const
+bool BackgroundInputProcessor::isProcessing() const
 {
-    return _isRunning;
+    return _isProcessing;
 }
 
-void BackgroundInputProcessor::setIsRunning(bool isRunning)
+void BackgroundInputProcessor::setIsProcessing(bool isProcessing)
 {
-    _isRunning = isRunning;
+    _isProcessing = isProcessing;
     condition.wakeAll();
 }
 
 void BackgroundInputProcessor::stop(int waitingTime)
 {
-    setIsRunning(false);
-    if (waitingTime > 0) {
+    setIsProcessing(false);
+    if (isRunning() && waitingTime > 0) {
         if (!wait(waitingTime)) {
             terminate();
         }

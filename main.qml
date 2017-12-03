@@ -40,12 +40,13 @@ ApplicationWindow {
         width: 50
         height: 50
         text: "X"
-        onClicked: Qt.quit();
+        onClicked: app.close();  // Qt.quit();
     }
 
     onActiveChanged: {
         if (!debug && !active)
-            Qt.quit();
+//            Qt.quit();
+            app.close();
     }
 }
 

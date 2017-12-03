@@ -34,6 +34,7 @@ Rectangle {
                 wrapMode: Label.Wrap
                 horizontalAlignment: Label.AlignHCenter
             }
+            // TODO: show program arguments
         }
 
         Label {

@@ -63,7 +63,11 @@ void RunProgramModule::updateProgramsFromDesktopFilesDirectory(const QString& di
             continue;
 
         // TODO: convert exec to path
-        RunProgramModuleProgram program(exec);
+        QString absolutePath = programNameToAbsolutePath(exec);
+        if (absolutePath.isEmpty())
+            continue;
+
+        RunProgramModuleProgram program(absolutePath);
 
         program.name = desktopFile.getItem("Desktop Entry", "Name");
         program.description = desktopFile.getItem("Desktop Entry", "Comment");
@@ -79,6 +83,50 @@ void RunProgramModule::updateProgramsFromDesktopFilesDirectory(const QString& di
     }
 }
 
+QString RunProgramModule::pathToFileName(const QString& path)
+{
+    if (path.size() < 1)
+        return "";
+
+    QChar quoteChar = '\'';
+    bool quoteFound = false;
+    if (path.startsWith(quoteChar)) {
+        quoteFound = true;
+    } else {
+        quoteChar = '"';
+        if (path.startsWith(quoteChar))
+            quoteFound = true;
+    }
+
+    if (quoteFound) {
+        int posOfSecondQuoteChar = path.indexOf(quoteChar, 1);
+        if (posOfSecondQuoteChar >= 0) {
+            return path.mid(1, posOfSecondQuoteChar - 1);
+        }
+    }
+
+    QString fileName;
+
+    for (int i = 0; i < path.size() - 1; ++i) {
+        if (path[i] == '\\')
+            if (path[i + 1] == ' ') {
+                fileName += path[i];
+                fileName += path[i + 1];
+                ++i;
+                continue;
+            }
+
+        if (path[i] == ' ')
+            return fileName;
+
+        fileName += path[i];
+    }
+    if (path[path.size() - 1] != ' ')
+        fileName += path[path.size() - 1];
+
+    return fileName;
+}
+
 void RunProgramModule::updateProgram(const RunProgramModuleProgram& program)
 {
     if (program.path.isEmpty())
@@ -88,6 +136,15 @@ void RunProgramModule::updateProgram(const RunProgramModuleProgram& program)
 
     if (it == programs.end()) {
         programs.insert(program.path, program);
+        auto fileName = pathToFileName(program.path);
+        int indexOfLastSlash = fileName.lastIndexOf('/');
+        if (indexOfLastSlash < 0)
+            indexOfLastSlash = fileName.lastIndexOf('\\');
+        if (indexOfLastSlash >= 0)
+            fileName = fileName.mid(indexOfLastSlash + 1);
+
+        const RunProgramModuleProgram& prog = *programs.find(program.path);
+        programsByFileNameMap.insert(fileName, &prog);
     } else {
         RunProgramModuleProgram& p = *it;
 
@@ -109,6 +166,22 @@ RunProgramModule::RunProgramModule()
 {
 }
 
+QString RunProgramModule::programNameToAbsolutePath(const QString& name)
+{
+    // TODO: add options
+    QFileInfo file(pathToFileName(name));
+    if (file.exists() && file.isFile())
+        return file.absoluteFilePath();
+
+    auto it = programsByFileNameMap.find(file.fileName());
+    if (it != programsByFileNameMap.end()) {
+        RunProgramModuleProgram const* program = *it;
+        return program->path;
+    }
+
+    return "";
+}
+
 void RunProgramModule::init()
 {
     updateProgramsFromPath();
@@ -116,9 +189,23 @@ void RunProgramModule::init()
 
 void RunProgramModule::update()
 {
-    // TODO: split it to parts
-    updateProgramsFromDesktopFilesDirectory("/usr/share/applications");
-    //    updateProgramsFromDesktopFilesDirectory("/usr/share/");
+    // TODO: refactor it
+    static size_t counter = 0;
+    switch (counter) {
+    case 0:
+        updateProgramsFromDesktopFilesDirectory("/usr/share/applications");
+        break;
+    case 1:
+        updateProgramsFromDesktopFilesDirectory("/usr/local/share/applications");
+        break;
+    case 2:
+        updateProgramsFromDesktopFilesDirectory("~/.local/share/applications");
+        break;
+    default:
+        return;
+        break;
+    }
+    ++counter;
 }
 bool RunProgramModule::needsUpdating()
 {

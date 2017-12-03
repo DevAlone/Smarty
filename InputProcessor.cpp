@@ -6,8 +6,10 @@
 InputProcessor::InputProcessor(QObject* parent)
     : QObject(parent)
 {
-    thread = new BackgroundInputProcessor(this);
-    thread->start();
+    //    thread = new BackgroundInputProcessor(this);
+    thread = BackgroundInputProcessor::getInstance();
+    if (!thread->isRunning())
+        thread->start();
 
     connect(
         thread, &BackgroundInputProcessor::processingStarted,
@@ -32,9 +34,6 @@ void InputProcessor::processInput(const QString& input)
 bool InputProcessor::processKey(Qt::Key key)
 {
     switch (key) {
-    case Qt::Key_Escape:
-        QGuiApplication::quit();
-        break;
     case Qt::Key_Tab:
         //        qDebug() << "Tab";
         break;

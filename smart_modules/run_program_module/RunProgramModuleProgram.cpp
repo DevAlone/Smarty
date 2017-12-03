@@ -1,9 +1,7 @@
 #include "RunProgramModuleProgram.h"
 
-RunProgramModuleProgram::RunProgramModuleProgram(const QString& path, const QString& name, const QString& iconPath)
+RunProgramModuleProgram::RunProgramModuleProgram(const QString& path)
     : path(path)
-    , iconPath(iconPath)
-    , name(name)
 {
 }
 

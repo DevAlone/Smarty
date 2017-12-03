@@ -34,7 +34,7 @@ ApplicationWindow {
         id: closeButton
         text: "X"
 
-        onClicked: Qt.quit();
+        onClicked: app.close();  // Qt.quit();
     }
 
     Behavior on y {
@@ -47,7 +47,8 @@ ApplicationWindow {
 
     onActiveChanged: {
         if (!active)
-            Qt.quit();
+            app.close();
+//            Qt.quit();
     }
 }
 

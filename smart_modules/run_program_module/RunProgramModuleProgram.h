@@ -4,11 +4,12 @@
 #include <QtCore>
 
 struct RunProgramModuleProgram {
-    RunProgramModuleProgram(const QString& path, const QString& name = "", const QString& iconPath = "");
+    RunProgramModuleProgram(const QString& path);
     //    RunProgramModuleProgram(const RunProgramModuleProgram& obj);
     RunProgramModuleProgram& operator=(const RunProgramModuleProgram& obj);
 
     const QString path;
+    QStringList arguments;
 
     // may be empty
     // It's either path in fs or icon name in freedesktop's terms

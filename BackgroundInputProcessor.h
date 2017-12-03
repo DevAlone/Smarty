@@ -12,13 +12,15 @@
 
 class BackgroundInputProcessor : public QThread {
     Q_OBJECT
-public:
     explicit BackgroundInputProcessor(QObject* parent = nullptr);
+
+public:
+    static BackgroundInputProcessor* getInstance();
 
     void processInput(const QString& input);
 
-    bool isRunning() const;
-    void setIsRunning(bool isRunning);
+    bool isProcessing() const;
+    void setIsProcessing(bool isProcessing);
     void stop(int waitingTime = 0);
 
 signals:
@@ -34,7 +36,7 @@ private:
     QList<QObject*> process();
 
     InputParser* parser = nullptr;
-    bool _isRunning = true;
+    bool _isProcessing = true;
     QWaitCondition condition;
     QMutex mutex;
     QString lastInput;

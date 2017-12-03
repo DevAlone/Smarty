@@ -29,6 +29,9 @@ public:
 private:
     RunProgramModule();
 
+    // returns empty string if fails
+    QString programNameToAbsolutePath(const QString& name);
+    QString pathToFileName(const QString& path);
     void updateProgramsFromPath();
     void updateProgramsFromDesktopFilesDirectory(const QString& dirPath);
 
@@ -36,6 +39,7 @@ private:
 
     //    QSet<RunProgramModuleProgram> programs;
     QMap<QString, RunProgramModuleProgram> programs;
+    QMap<QString, RunProgramModuleProgram const*> programsByFileNameMap;
     //    QMap<QString, RunProgramModuleProgram const*> programsByPathMap;
     // TODO: programs by name map
     //    QMap<QString, RunProgramModuleProgram> programs;

@@ -6,9 +6,10 @@
 #include <QDebug>
 
 namespace smart_modules {
-ProgramItem::ProgramItem(Module* module, const QString& path, const QString& description, const QVariant& terminal)
+ProgramItem::ProgramItem(Module* module, const QString& path, const QStringList& arguments, const QString& description, const QVariant& terminal)
     : TextItem(module, path)
     , path(path)
+    , arguments(arguments)
     , description(description)
     , terminal(!terminal.isValid() || terminal.toBool())
 {
@@ -19,7 +20,7 @@ ProgramItem::ProgramItem(Module* module, const QString& path, const QString& des
 }
 
 ProgramItem::ProgramItem(Module* module, const RunProgramModuleProgram& program)
-    : ProgramItem(module, program.path, program.description, program.terminal)
+    : ProgramItem(module, program.path, program.arguments, program.description, program.terminal)
 {
     setData(program.name);
     setIconPath(IconProcessor::resolveIconPath(program.iconPath));
@@ -31,7 +32,7 @@ void ProgramItem::action()
 {
     QProcess process;
 
-    process.startDetached(path);
+    process.startDetached(path, arguments);
 }
 
 QString ProgramItem::getPath() const

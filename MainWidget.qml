@@ -46,9 +46,10 @@ Item {
                         itemsView.сurrentIndexAdd(10);
                     else if (event.key === Qt.Key_PageUp)
                         itemsView.currentIndexDeduct(10);
-                    else if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                    else if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
                         itemsView.doCurrentItemAction();
-                    }
+                    else if (event.key === Qt.Key_Escape)
+                        app.close();
                     else if (inputProcessor.processKey(event.key))
                         event.accepted = true;
                 }
@@ -97,7 +98,8 @@ Item {
                     var currentItem = model[currentIndex];
                     currentItem.action();
                     if (currentItem.smartyShouldBeClosed)
-                        Qt.quit();
+                        app.close();
+//                        Qt.quit();
                 }
             }
         }
@@ -106,12 +108,12 @@ Item {
     InputProcessor {
         id: inputProcessor;
         onProcessingStarted: {
-//            itemsView.visible = false;
+            //            itemsView.visible = false;
         }
         onProcessingFinished: function (items) {
             itemsView.model = items;
             // itemsView.visible = items.length > 0;
-//            itemsView.visible = true;
+            //            itemsView.visible = true;
         }
     }
 
