@@ -32,6 +32,10 @@ Project {
         files: [
             "BackgroundInputProcessor.cpp",
             "BackgroundInputProcessor.h",
+            "qfreedesktop/Icon.cpp",
+            "qfreedesktop/Icon.h",
+            "qfreedesktop/IconDatabase.cpp",
+            "qfreedesktop/IconDatabase.h",
             "IconProcessor.cpp",
             "IconProcessor.h",
             "ImageProvider.cpp",

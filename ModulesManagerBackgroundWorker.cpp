@@ -43,6 +43,6 @@ void ModulesManagerBackgroundWorker::run()
         size_t sleepInterval = boostProcessing ? 50 : 100;
 
         if (QDateTime::currentMSecsSinceEpoch() > prevTime + sleepInterval)
-            sleep(sleepInterval);
+            msleep(sleepInterval);
     }
 }

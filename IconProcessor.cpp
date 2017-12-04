@@ -2,6 +2,7 @@
 
 #include <QFileInfo>
 
+#include <qfreedesktop/IconDatabase.h>
 #include <qfreedesktop/IconFile.h>
 
 IconProcessor::IconProcessor()
@@ -10,15 +11,11 @@ IconProcessor::IconProcessor()
 
 QString IconProcessor::resolveIconPath(const QString& iconName)
 {
+    // TODO: maybe remove it
     QFileInfo fileInfo(iconName);
     if (fileInfo.exists() && fileInfo.isFile())
         return fileInfo.absoluteFilePath();
 
-    // TODO: rewrite it!
-    qfreedesktop::IconFile freeDesktopIconFile(iconName);
-
-    if (freeDesktopIconFile.isValid())
-        return freeDesktopIconFile.getRealAbsolutePath();
-
-    return "";
+    // TODO: make it crossplatform
+    return qfreedesktop::IconDatabase::getIconPath(iconName);
 }

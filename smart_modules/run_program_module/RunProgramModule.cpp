@@ -6,6 +6,8 @@
 #include <QDirIterator>
 #include <QtCore>
 
+#include <qfreedesktop/IconDatabase.h>
+
 namespace smart_modules {
 
 QStringList getExecutablesFromPath()
@@ -200,6 +202,9 @@ void RunProgramModule::update()
         break;
     case 2:
         updateProgramsFromDesktopFilesDirectory("~/.local/share/applications");
+        break;
+    case 3:
+        qfreedesktop::IconDatabase::init();
         break;
     default:
         return;
