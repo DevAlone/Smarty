@@ -13,12 +13,12 @@
 
 int main(int argc, char* argv[])
 {
-    RunGuard runGuard("Smarty/asdf123sdhf45axcZV");
-    if (!runGuard.tryToRun()) {
-        // TODO: send signal to other smarty's instance
-        qInfo() << QObject::tr("Another instance of Smarty is already runned");
-        return 0;
-    }
+    //    RunGuard runGuard("Smarty/asdf123sdhf45axcZV");
+    //    if (!runGuard.tryToRun()) {
+    //        // TODO: send signal to other smarty's instance
+    //        qInfo() << QObject::tr("Another instance of Smarty is already runned");
+    //        return 0;
+    //    }
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     //    QGuiApplication app(argc, argv);
