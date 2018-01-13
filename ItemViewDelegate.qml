@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtQuick.Layouts 1.3
 import smarty.models 1.0
 import "constants.js" as Constants
@@ -21,7 +21,6 @@ Item {
             onClicked: itemsView.currentIndex = index
         }
 
-
         Text {
             text: model.modelData.moduleName
             x: Constants.itemBorderWidth + 2
@@ -40,20 +39,20 @@ Item {
             z: 1
         }
 
-
         Component.onCompleted: {
-            var path = "item_renderer/" + model.modelData.renderer + ".qml";
-            var component = Qt.createComponent(path);
+            var path = "item_renderer/" + model.modelData.renderer + ".qml"
+            var component = Qt.createComponent(path)
 
             if (component.status !== Component.Ready) {
                 if (component.status === Component.Error)
-                    console.error("Error during loading Item's renderer: " +
-                                  component.errorString());
+                    console.error(
+                                "Error during loading Item's renderer: " + component.errorString(
+                                    ))
 
-                return;
+                return
             }
 
-            var obj = component.createObject(itemViewContainer);
+            var obj = component.createObject(itemViewContainer)
         }
     }
 }

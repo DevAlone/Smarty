@@ -21,12 +21,12 @@ ModulesManager::getModules() const
     return modules;
 }
 
-void ModulesManager::_registerModule(smart_modules::Module* module)
+void ModulesManager::_registerModule(std::pair<std::type_index, smart_modules::Module*> module)
 {
-    modules[typeid(*module)] = module;
+    modules[module.first] = module.second;
 
-    for (const auto& link : module->getModuleLinks()) {
-        modulesByLink[link.toLower().toStdString()] = module;
+    for (const auto& link : module.second->getModuleLinks()) {
+        modulesByLink[link.toLower().toStdString()] = module.second;
     }
 }
 

@@ -12,5 +12,7 @@ Icon& Icon::operator=(const Icon& obj)
     size = obj.size;
     context = obj.context;
     themeName = obj.themeName;
+
+    return *this;
 }
 }

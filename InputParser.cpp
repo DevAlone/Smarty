@@ -20,7 +20,7 @@ QPair<QString, QString> getKeyValue(const QString& str, size_t index)
         str.right(str.size() - index - 1).trimmed());
 }
 
-QList<QObject*> InputParser::parse(const QString& input)
+QList<QObject*> InputParser::parse(QString input)
 {
     QVector<Item*> resultItems;
 
@@ -39,14 +39,13 @@ QList<QObject*> InputParser::parse(const QString& input)
         auto keyVal = getKeyValue(input, delimiterPosition);
         auto module = modulesManager->getModuleByLink(keyVal.first);
 
-        if (module)
+        if (module) {
             guessedModules.append(module);
-        else
+            input = keyVal.second;
+        } else
             guessedModules = guessModules(input);
-    } else {
-        // try to guess module
+    } else
         guessedModules = guessModules(input);
-    }
 
     int itemsFromModuleCount = settings.value("smarty/parser/itemsFromModuleCount", -1).toInt();
     if (itemsFromModuleCount < 0)

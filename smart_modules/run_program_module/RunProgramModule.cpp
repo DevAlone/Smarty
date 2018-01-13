@@ -225,7 +225,7 @@ QVector<Item*> RunProgramModule::getItems(const QString& input, int count)
         return result;
 
     for (const RunProgramModuleProgram& program : programs) {
-        int similarity = program.compareToString(input);
+        int similarity = program.compareToString(input.trimmed());
         if (similarity > 0) {
             auto item = new ProgramItem(this, program);
             item->setPriority(similarity);
@@ -253,6 +253,7 @@ QVector<QString> RunProgramModule::getModuleLinks()
 {
     return {
         "run",
+        "r",
         "run program",
         "runprogram",
         "runprogrammodule",

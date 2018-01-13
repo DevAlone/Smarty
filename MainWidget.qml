@@ -1,5 +1,5 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick 2.9
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
 import QtQuick.Controls.Styles 1.4
@@ -11,8 +11,7 @@ Item {
     ColumnLayout {
         id: mainLayout
         anchors.fill: parent
-        spacing: 0  // 5
-
+        spacing: 0 // 5
 
         Rectangle {
             z: 5
@@ -22,7 +21,6 @@ Item {
             border.color: Constants.itemBorderColor
             border.width: Constants.itemBorderWidth
             Layout.fillWidth: true
-
 
             TextField {
                 id: mainInput
@@ -35,25 +33,26 @@ Item {
                 font.pointSize: Constants.textItemDataFontSize
                 selectByMouse: true
                 focus: true
-                onFocusChanged: focus = true;
+                onFocusChanged: focus = true
 
                 Keys.onPressed: {
                     if (event.key === Qt.Key_Down)
-                        itemsView.сurrentIndexAdd(1);
+                        itemsView.сurrentIndexAdd(1)
                     else if (event.key === Qt.Key_Up)
-                        itemsView.currentIndexDeduct(1);
+                        itemsView.currentIndexDeduct(1)
                     else if (event.key === Qt.Key_PageDown)
-                        itemsView.сurrentIndexAdd(10);
+                        itemsView.сurrentIndexAdd(10)
                     else if (event.key === Qt.Key_PageUp)
-                        itemsView.currentIndexDeduct(10);
-                    else if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return)
-                        itemsView.doCurrentItemAction();
+                        itemsView.currentIndexDeduct(10)
+                    else if (event.key === Qt.Key_Enter
+                             || event.key === Qt.Key_Return)
+                        itemsView.doCurrentItemAction()
                     else if (event.key === Qt.Key_Escape)
-                        app.close();
+                        app.close()
                     else if (inputProcessor.processKey(event.key))
-                        event.accepted = true;
+                        event.accepted = true
                 }
-                onTextChanged: inputProcessor.processInput(text);
+                onTextChanged: inputProcessor.processInput(text)
 
                 background: Rectangle {
                     color: Constants.itemColor
@@ -67,14 +66,15 @@ Item {
             id: itemsView
             visible: true
 
-            spacing: 0  // 5
+            spacing: 0 // 5
             highlightMoveDuration: 300
             highlightMoveVelocity: 500
             flickableDirection: Flickable.VerticalFlick
-            //                boundsBehavior: Flickable.StopAtBounds
-            ScrollBar.vertical: ScrollBar {}
+            ScrollBar.vertical: ScrollBar {
+            }
 
-            delegate: ItemViewDelegate { }
+            delegate: ItemViewDelegate {
+            }
 
             highlight: Rectangle {
                 color: "transparent"
@@ -84,53 +84,50 @@ Item {
             }
 
             function сurrentIndexAdd(value) {
-                currentIndex += value;
+                currentIndex += value
                 if (currentIndex >= count)
-                    currentIndex = count - 1;
+                    currentIndex = count - 1
             }
             function currentIndexDeduct(value) {
-                currentIndex -= value;
+                currentIndex -= value
                 if (currentIndex < 0)
-                    currentIndex = 0;
+                    currentIndex = 0
             }
             function doCurrentItemAction() {
                 if (visible && count > 0) {
-                    var currentItem = model[currentIndex];
-                    currentItem.action();
+                    var currentItem = model[currentIndex]
+                    currentItem.action()
                     if (currentItem.smartyShouldBeClosed)
-                        app.close();
-//                        Qt.quit();
+                        app.close()
                 }
             }
         }
     }
 
     InputProcessor {
-        id: inputProcessor;
+        id: inputProcessor
         onProcessingStarted: {
-            //            itemsView.visible = false;
+
         }
         onProcessingFinished: function (items) {
-            itemsView.model = items;
-            // itemsView.visible = items.length > 0;
-            //            itemsView.visible = true;
+            itemsView.model = items
         }
     }
 
-    function getMinimumHeight () {
-        return mainInputRect.height;
+    function getMinimumHeight() {
+        return mainInputRect.height
     }
-    function getHeight (){
-        return mainInputRect.height + itemsView.count * (Constants.itemHeight + spacing);
+    function getHeight() {
+        return mainInputRect.height + itemsView.count * (Constants.itemHeight + spacing)
     }
     function hasItems() {
-        return itemsView.count > 0;
+        return itemsView.count > 0
     }
 
     property int spacing: 0
 
     onSpacingChanged: {
-        mainLayout.spacing = spacing;
-        itemsView.spacing = spacing;
+        mainLayout.spacing = spacing
+        itemsView.spacing = spacing
     }
 }

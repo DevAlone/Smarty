@@ -24,11 +24,11 @@ void ModulesManagerBackgroundWorker::run()
         prevTime = QDateTime::currentMSecsSinceEpoch();
         bool boostProcessing = false;
 
-        while (!modulesManager->modulesQueue.empty()) {
-            auto module = modulesManager->modulesQueue.back();
-            modulesManager->modulesQueue.pop();
+        while (!modulesManager->modulesQueue.isEmpty()) {
+            auto modulePair = modulesManager->modulesQueue.dequeue();
+            auto module = modulePair.second;
             module->init();
-            modulesManager->_registerModule(module);
+            modulesManager->_registerModule(modulePair);
             boostProcessing = true;
         }
 

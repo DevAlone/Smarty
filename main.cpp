@@ -11,17 +11,19 @@
 
 #include <QDebug>
 
+#include "exprtk.hpp"
+#include <iostream>
+
 int main(int argc, char* argv[])
 {
-    //    RunGuard runGuard("Smarty/asdf123sdhf45axcZV");
-    //    if (!runGuard.tryToRun()) {
-    //        // TODO: send signal to other smarty's instance
-    //        qInfo() << QObject::tr("Another instance of Smarty is already runned");
-    //        return 0;
-    //    }
+    RunGuard runGuard("Smarty/asdf123sdhf45axcZV");
+    if (!runGuard.tryToRun()) {
+        // TODO: send signal to other smarty's instance
+        qInfo() << QObject::tr("Another instance of Smarty is already runned");
+        return 0;
+    }
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    //    QGuiApplication app(argc, argv);
     SmartyApplication app(argc, argv);
 
     app.setOrganizationName("DevAlone");
@@ -30,9 +32,8 @@ int main(int argc, char* argv[])
 
     auto modulesManager = ModulesManager::getInstance();
 
+    modulesManager->registerModule<smart_modules::MathExpressionExecutorModule>();
     modulesManager->registerModule<smart_modules::RunProgramModule>();
-    //    modulesManager->registerModule<smart_modules::TestModule>();
-    //    modulesManager->registerModule<smart_modules::NotTestModule>();
 
     qmlRegisterType<InputProcessor>("smarty.input", 1, 0, "InputProcessor");
     qmlRegisterType<Item>("smarty.models", 1, 0, "ItemModel");

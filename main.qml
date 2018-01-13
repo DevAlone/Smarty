@@ -1,5 +1,5 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick 2.9
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
 import smarty.input 1.0
@@ -14,12 +14,12 @@ ApplicationWindow {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: Qt.quit();
+        onClicked: Qt.quit()
     }
 
     MainWidget {
         x: parent.width / 4
-        y: hasItems() ? parent.height / 4: parent.height / 2 - getHeight()
+        y: isOnTheTop() ? parent.height / 4 : parent.height / 2 - getHeight()
         width: parent.width / 2
         height: Math.min(parent.height / 2, getHeight())
         spacing: 5
@@ -31,6 +31,16 @@ ApplicationWindow {
                 easing.type: Easing.OutBack
             }
         }
+
+        property bool _isOnTheTop: false
+
+        function isOnTheTop() {
+            var result = hasItems()
+            if (result)
+                _isOnTheTop = true
+
+            return _isOnTheTop || result
+        }
     }
 
     Button {
@@ -40,13 +50,12 @@ ApplicationWindow {
         width: 50
         height: 50
         text: "X"
-        onClicked: app.close();  // Qt.quit();
+        onClicked: app.close() // Qt.quit();
     }
 
     onActiveChanged: {
         if (!debug && !active)
-//            Qt.quit();
-            app.close();
+            //            Qt.quit();
+            app.close()
     }
 }
-

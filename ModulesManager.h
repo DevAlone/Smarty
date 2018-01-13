@@ -4,6 +4,7 @@
 #include "smart_modules/Module.h"
 
 #include "ModulesManagerBackgroundWorker.h"
+#include "ThreadSafeQueue.hpp"
 
 #include <QObject>
 #include <QString>
@@ -32,19 +33,21 @@ public:
 private:
     explicit ModulesManager(QObject* parent = nullptr);
 
-    void _registerModule(smart_modules::Module* module);
+    void _registerModule(std::pair<std::type_index, smart_modules::Module*> module);
 
     ModulesManagerBackgroundWorker* worker = nullptr;
     std::unordered_map<std::type_index, smart_modules::Module*> modules;
     // TODO: consider using QString due to good unicode support
     std::unordered_map<std::string, smart_modules::Module*> modulesByLink;
-    std::queue<smart_modules::Module*> modulesQueue;
+    ThreadSafeQueue<std::pair<std::type_index, smart_modules::Module*> > modulesQueue;
 };
 
 template <typename ModuleType>
 void ModulesManager::registerModule()
 {
-    modulesQueue.push(smart_modules::getModuleInstance<ModuleType>());
+    auto module = smart_modules::getModuleInstance<ModuleType>();
+    auto pair = std::make_pair<std::type_index, smart_modules::Module*>(typeid(ModuleType), module);
+    modulesQueue.enqueue(pair);
 }
 
 #endif // MODULESMANAGER_H

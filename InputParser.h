@@ -16,7 +16,7 @@ class InputParser : public QObject {
 public:
     explicit InputParser(QObject* parent = nullptr);
 
-    QList<QObject*> parse(const QString& input);
+    QList<QObject*> parse(QString input);
     QVector<smart_modules::Module*> guessModules(const QString& input);
 
 signals:
